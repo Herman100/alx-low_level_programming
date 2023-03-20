@@ -1,11 +1,7 @@
-#ifndef SIZE_T_DEFINITION
-#define SIZE_T_DEFINITION
-
-#include <stddef.h>
-
-
 #ifndef DOG_H
 #define DOG_H
+
+#include <stddef.h>
 
 /**
  * struct dog - contains dog information
