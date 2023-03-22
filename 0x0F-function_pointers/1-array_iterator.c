@@ -14,27 +14,10 @@
 
 void array_iterator(int *array, size_t size, void (*action)(int))
 {
-	for (size_t i = 0; i < size; i++)
-	{
+	unsigned int i;
 
-	action(array[i]);
-
-	}
-}
-
-void print_number(int num)
-{
-
-	printf("%d\n", num);
-
-}
-
-int main(void)
-{
-	int arr[] = {1, 2, 3, 4, 5};
-	size_t size = sizeof(arr) / sizeof(int);
-
-	array_iterator(arr, size, print_number);
-	return (0);
+	if (array && size > 0 && action)
+		for (i = 0; i < size; i++)
+			action(array[i]);
 }
 
