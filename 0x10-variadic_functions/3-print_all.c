@@ -1,66 +1,79 @@
-#include <stdarg.h>
+#include "variadic_functions.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "variadic_functions.h"
-int print_c(va_list a)
+
+/**
+ * _printchar - print char type element from va_list
+ * @list: va_list passed to function
+ */
+void _printchar(va_list list)
 {
-	printf("%c", va_arg(a, int));
-	return (0);
+	printf("%c", va_arg(list, int));
 }
-int print_i(va_list a)
-{
-	printf("%d", va_arg(a, int));
-	return (0);
-}
-int print_f(va_list a)
-{
-	printf("%f", va_arg(a, double));
-	return (0);
-}
-int print_s(va_list a)
+
+/**
+ * _printstr - print string element from va_list
+ * @list: va_list passed to function
+ */
+void _printstr(va_list list)
 {
 	char *s;
 
-	s = va_arg(a, char *);
+	s = va_arg(list, char *);
 	if (s == NULL)
-	{
-		printf("(nil)");
-		return (0);
-	}
+		s = "(nil)";
 	printf("%s", s);
-	return (0);
 }
+
+/**
+ * _printfloat - print float type element from va_list
+ * @list: va_list passed to function
+ */
+void _printfloat(va_list list)
+{
+	printf("%f", va_arg(list, double));
+}
+
+/**
+ * _printint - print int type element from va_list
+ * @list: va_list passed to function
+ */
+void _printint(va_list list)
+{
+	printf("%d", va_arg(list, int));
+}
+
+/**
+ * print_all - print anything passed if char, int, float, or string.
+ * @format: string of formats to use and print
+ */
 void print_all(const char * const format, ...)
 {
-	int i, j;
-	char *sep = "";
-	char *sep2 = ", ";
-	va_list anyArgs;
-	printer ops[] = {
-		{"c", print_c},
-		{"i", print_i},
-		{"s", print_s},
-		{"f", print_f},
-		{NULL, NULL}
+	unsigned int i, j;
+	va_list args;
+	char *sep;
+
+	checker storage[] = {
+		{ "c", _printchar },
+		{ "f", _printfloat },
+		{ "s", _printstr },
+		{ "i", _printint }
 	};
 
-	va_start(anyArgs,format);
 	i = 0;
-	while (format[i])
+	sep = "";
+	va_start(args, format);
+	while (format != NULL && format[i / 4] != '\0')
 	{
-		j = 0;
-		while (ops[j].f != NULL)
+		j = i % 4;
+		if (storage[j].type[0] == format[i / 4])
 		{
-			if (format[i] == *(ops[j].c))
-			{
-				printf("%s", sep);
-				ops[j].f(anyArgs);
-			}
-			j++;
+			printf("%s", sep);
+			storage[j].f(args);
+			sep = ", ";
 		}
-		sep = sep2;
 		i++;
 	}
 	printf("\n");
-
+	va_end(args);
 }
