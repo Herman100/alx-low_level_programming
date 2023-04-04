@@ -7,36 +7,29 @@
  * @head: pointer to the head of the list
  * Return: the number of nodes in the list
  */
+
 size_t print_listint_safe(const listint_t *head)
 {
-	size_t count = 0;
-	const listint_t *slow, *fast;
+	int count = 0, i;
+	const listint_t *tmp[200];
 
-	if (head == NULL)
+	if (!head)
 		exit(98);
-
-	slow = head;
-	fast = head;
-
-	while (slow && fast && fast->next)
-	{
-		slow = slow->next;
-		fast = fast->next->next;
-
-		if (slow == fast)
-		{
-			printf("-> [%p] %d\n", (void *)slow, slow->n);
-			exit(98);
-		}
-	}
 
 	while (head)
 	{
+		for (i = 0; i < count; i++)
+		{
+			if (tmp[i] == head)
+			{
+				printf("-> [%p] %d\n", (void *)head, head->n);
+				return (count);
+			}
+		}
 		printf("[%p] %d\n", (void *)head, head->n);
-		head = head->next;
+		tmp[count] = head;
 		count++;
+		head = head->next;
 	}
-
 	return (count);
 }
-
