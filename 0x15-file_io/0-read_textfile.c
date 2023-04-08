@@ -1,35 +1,59 @@
 #include "main.h"
-#include <unistd.h>
-#include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
+/**
+ * read_textfile - reads a text file and prints it to the POSIX standard output
+ * @filename: name of the file to read
+ * @letters: number of letters to read and print
+ *
+ * Return: actual number of letters read and printed, or 0 on failure
+ */
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-    int fd;
-    ssize_t n_read, n_written;
-    char *buffer;
+    ssize_t num_read, num_written;
+    char *buf;
 
-    if (filename == NULL)
+    if (!filename)
         return (0);
 
-    fd = open(filename, O_RDONLY);
+    buf = malloc(sizeof(char) * (letters + 1));
+    if (!buf)
+        return (0);
+
+    /* Open file for reading */
+    int fd = open(filename, O_RDONLY);
     if (fd == -1)
+    {
+        free(buf);
         return (0);
+    }
 
-    buffer = malloc(sizeof(char) * letters);
-    if (buffer == NULL)
+    /* Read from file */
+    num_read = read(fd, buf, letters);
+    if (num_read == -1)
+    {
+        free(buf);
+        close(fd);
         return (0);
+    }
 
-    n_read = read(fd, buffer, letters);
-    if (n_read == -1)
+    /* Null-terminate the buffer */
+    buf[num_read] = '\0';
+
+    /* Print to standard output */
+    num_written = write(STDOUT_FILENO, buf, num_read);
+    if (num_written == -1 || num_written != num_read)
+    {
+        free(buf);
+        close(fd);
         return (0);
+    }
 
-    n_written = write(STDOUT_FILENO, buffer, n_read);
-    if (n_written == -1 || n_written != n_read)
-        return (0);
-
+    /* Cleanup and return the number of bytes read */
+    free(buf);
     close(fd);
-    free(buffer);
-
-    return (n_written);
+    return (num_read);
 }
+
