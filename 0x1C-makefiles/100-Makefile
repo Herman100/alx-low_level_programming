@@ -1,22 +1,41 @@
-CC = gcc
-SRC = main.c school.c
-OBJ = $(SRC:.c=.o)
-NAME = school
-RM = rm -f
-CFLAGS = -Wall -Werror -Wextra -pedantic
+# Compiler
+CC := gcc
 
-all: $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+# Compiler flags
+CFLAGS := -Wall -Werror -Wextra -pedantic
 
+# Source files
+SRC := main.c school.c
+
+# Object files
+OBJ := $(SRC:.c=.o)
+
+# Executable name
+NAME := school
+
+# Program to delete files
+RM := /bin/rm -f
+
+# Rule to build the executable
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+
+# Rule to clean up temporary files and the executable
 clean:
-	$(RM) *~
-	$(RM) $(NAME)
+	$(RM) *~ $(NAME)
 
+# Rule to clean up object files
 oclean:
 	$(RM) $(OBJ)
 
+# Rule to clean up temporary files, the executable, and the object files
 fclean: clean oclean
 
+# Rule to force recompilation of all source files
 re: fclean all
 
-.PHONY: all clean oclean fclean re
+# Rule to compile .c files into .o files
+%.o: %.c m.h
+	$(CC) $(CFLAGS) -c $< -o $@
