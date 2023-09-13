@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "search_algos.h"
 
 /**
  * jump_list - Searches for a value in a sorted list of integers using
@@ -12,7 +13,7 @@
  * Return: If the value is not present or the head of the list is NULL, NULL.
  *         Otherwise, a pointer to the first node where value is located.
  *
- * Description: Uses the square root of the size of the list as the jump step
+ * Description: Uses the square root of the size of the list as the jump step.
  */
 listint_t *jump_list(listint_t *list, size_t size, int value)
 {
