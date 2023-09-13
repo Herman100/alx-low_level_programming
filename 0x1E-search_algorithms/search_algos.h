@@ -53,10 +53,7 @@ void print_skiplist(const skiplist_t *list);
 void free_skiplist(skiplist_t *list);
 void init_express(skiplist_t *list, size_t size);
 skiplist_t *linear_skip(skiplist_t *list, int value);
-
-
-
-
+size_t get_last_index(skiplist_t *list);
 
 
 #endif /* SEARCH_ALGOS_H */
